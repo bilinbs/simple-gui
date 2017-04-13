@@ -25,7 +25,7 @@ public class MainWindow {
     JButton tagButton;
     JLabel lblEnterTheText;
     
-    private String outputPath = "D:/outputFile";
+    private String outputPath = Messages.getString("MainWindow.0"); //$NON-NLS-1$
 
     /**
      * Launch the application.
@@ -65,7 +65,7 @@ public class MainWindow {
         frame.getContentPane().add(filePath);
         filePath.setColumns(10);
         
-        browseButton = new JButton("Browse");
+        browseButton = new JButton("Browse"); //$NON-NLS-1$
         browseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -77,13 +77,13 @@ public class MainWindow {
         browseButton.setBounds(287, 248, 89, 23);
         frame.getContentPane().add(browseButton);
         
-        tagButton= new JButton("Tag");
+        tagButton= new JButton("Tag"); //$NON-NLS-1$
         tagButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     saveText(outputPath);
                 } catch (IOException e1) {
-                    Alert.showAlert("Error while writing to file " + e1.getMessage());
+                    Alert.showAlert("Error while writing to file " + e1.getMessage()); //$NON-NLS-1$
                 }
             }
         });
@@ -94,7 +94,7 @@ public class MainWindow {
         textArea.setBounds(10, 62, 464, 176);
         frame.getContentPane().add(textArea);
         
-        lblEnterTheText = new JLabel("Enter the text here");
+        lblEnterTheText = new JLabel("Enter the text here"); //$NON-NLS-1$
         lblEnterTheText.setBounds(10, 37, 113, 14);
         frame.getContentPane().add(lblEnterTheText);
         
@@ -109,8 +109,8 @@ public class MainWindow {
         } else if(selectedFile!=null){
             Files.copy(selectedFile.toPath(), Paths.get(outputPath), StandardCopyOption.REPLACE_EXISTING);
         }
-        Alert.showAlert("Successfully created file");
-        Process proc = Runtime.getRuntime().exec("java ");
+        Alert.showAlert("Successfully created file"); //$NON-NLS-1$
+        Process proc = Runtime.getRuntime().exec("java "); //$NON-NLS-1$
         try {
             proc.waitFor();
         } catch (InterruptedException e) {
@@ -122,23 +122,23 @@ public class MainWindow {
         filePath.setEditable(false);
         filePath.setEnabled(false);
         String output = getOutputFromFile();
-        lblEnterTheText.setText("Tagged output");
+        lblEnterTheText.setText("Tagged output"); //$NON-NLS-1$
         textArea.setText(output);
     }
 
     private String getOutputFromFile() {
         List<String> lines;
         try {
-             lines =  Files.readAllLines(Paths.get(("D:/abcde.txt")));
+             lines =  Files.readAllLines(Paths.get((Messages.getString("MainWindow.8")))); //$NON-NLS-1$
              StringBuffer sb = new StringBuffer();
              for(String line : lines){
-                 sb.append(line).append("\n");
+                 sb.append(line).append("\n"); //$NON-NLS-1$
              }
              return sb.toString();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 }
