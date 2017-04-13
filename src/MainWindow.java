@@ -11,15 +11,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 
 public class MainWindow {
 
     private JFrame frame;
-    private JTextField textField;
+    private JTextField filePath;
     private JTextArea textArea;
     private File selectedFile;
+    JButton browseButton;
+    JButton tagButton;
+    JLabel lblEnterTheText;
     
     private String outputPath = "D:/outputFile";
 
@@ -56,25 +60,25 @@ public class MainWindow {
         frame.setResizable(false);
         frame.getContentPane().setLayout(null);
         
-        textField = new JTextField();
-        textField.setBounds(10, 249, 266, 20);
-        frame.getContentPane().add(textField);
-        textField.setColumns(10);
+        filePath = new JTextField();
+        filePath.setBounds(10, 249, 266, 20);
+        frame.getContentPane().add(filePath);
+        filePath.setColumns(10);
         
-        JButton btnNewButton = new JButton("Browse");
-        btnNewButton.addActionListener(new ActionListener() {
+        browseButton = new JButton("Browse");
+        browseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.showOpenDialog(frame);
                 selectedFile = fileChooser.getSelectedFile();
-                textField.setText(selectedFile.getAbsolutePath());
+                filePath.setText(selectedFile.getAbsolutePath());
             }
         });
-        btnNewButton.setBounds(287, 248, 89, 23);
-        frame.getContentPane().add(btnNewButton);
+        browseButton.setBounds(287, 248, 89, 23);
+        frame.getContentPane().add(browseButton);
         
-        JButton btnNewButton_1 = new JButton("Tag");
-        btnNewButton_1.addActionListener(new ActionListener() {
+        tagButton= new JButton("Tag");
+        tagButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     saveText(outputPath);
@@ -83,14 +87,14 @@ public class MainWindow {
                 }
             }
         });
-        btnNewButton_1.setBounds(385, 248, 89, 23);
-        frame.getContentPane().add(btnNewButton_1);
+        tagButton.setBounds(385, 248, 89, 23);
+        frame.getContentPane().add(tagButton);
         
         textArea = new JTextArea();
         textArea.setBounds(10, 62, 464, 176);
         frame.getContentPane().add(textArea);
         
-        JLabel lblEnterTheText = new JLabel("Enter the text here");
+        lblEnterTheText = new JLabel("Enter the text here");
         lblEnterTheText.setBounds(10, 37, 113, 14);
         frame.getContentPane().add(lblEnterTheText);
         
@@ -106,5 +110,35 @@ public class MainWindow {
             Files.copy(selectedFile.toPath(), Paths.get(outputPath), StandardCopyOption.REPLACE_EXISTING);
         }
         Alert.showAlert("Successfully created file");
+        Process proc = Runtime.getRuntime().exec("java ");
+        try {
+            proc.waitFor();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        browseButton.setEnabled(false);
+        tagButton.setEnabled(false);
+        filePath.setEditable(false);
+        filePath.setEnabled(false);
+        String output = getOutputFromFile();
+        lblEnterTheText.setText("Tagged output");
+        textArea.setText(output);
+    }
+
+    private String getOutputFromFile() {
+        List<String> lines;
+        try {
+             lines =  Files.readAllLines(Paths.get(("D:/abcde.txt")));
+             StringBuffer sb = new StringBuffer();
+             for(String line : lines){
+                 sb.append(line).append("\n");
+             }
+             return sb.toString();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "";
     }
 }
